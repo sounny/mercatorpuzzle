@@ -88,6 +88,7 @@ function enableDrag(poly, map) {
   }
   function onUp() {
     if (!start) return;
+    map.dragging.enable();
     map.off('mousemove', onMove);
     map.off('mouseup', onUp);
     start = null;
@@ -96,6 +97,10 @@ function enableDrag(poly, map) {
   poly.on('mousedown', (e) => {
     start = e.latlng;
     initial = poly.getLatLngs().map((r) => r.map((p) => ({ lat: p.lat, lng: p.lng })));
+    map.dragging.disable();
+    if (e.originalEvent) {
+      L.DomEvent.stopPropagation(e);
+    }
     map.on('mousemove', onMove);
     map.on('mouseup', onUp);
   });
