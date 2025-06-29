@@ -1,7 +1,7 @@
 # Mercator Puzzle Redux
 
 Dynamic take on the original Mercator Puzzle by Google.
-Built by Bramus! - [http://www.bram.us/](http://www.bram.us/)
+fork from Bramus! - [http://www.bram.us/](http://www.bram.us/)
 
 ## About
 
