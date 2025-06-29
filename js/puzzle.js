@@ -122,13 +122,31 @@ document.addEventListener('DOMContentLoaded', () => {
     worldCopyJump: true,
   });
 
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; OpenStreetMap contributors',
-  }).addTo(map);
+  const Esri_WorldShadedRelief = L.tileLayer(
+    'https://server.arcgisonline.com/ArcGIS/rest/services/{variant}/MapServer/tile/{z}/{y}/{x}',
+    {
+      variant: 'World_Shaded_Relief',
+      attribution: 'Tiles &copy; Esri &mdash; Source: Esri',
+      maxZoom: 13,
+      subdomains: ['a', 'b', 'c'],
+      minZoom: 0,
+    },
+  );
+  Esri_WorldShadedRelief.addTo(map);
 
   fetch('data/countries.geo.json')
     .then((r) => r.json())
     .then((data) => {
+      L.geoJSON(data, {
+        style: {
+          color: '#ffffff',
+          weight: 1,
+          opacity: 0.5,
+          fillOpacity: 0,
+        },
+        interactive: false,
+      }).addTo(map);
+
       const countriesToShow = getRandomIndexes(15, data.features.length);
       let totalScore = 0;
 
