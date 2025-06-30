@@ -78,6 +78,7 @@ function movePolygon(poly, center) {
 function enableDrag(poly, map) {
   let start = null;
   let initial = null;
+  let dragging = false;
   function onMove(e) {
     if (!start) return;
     const dLat = e.latlng.lat - start.lat;
@@ -88,15 +89,23 @@ function enableDrag(poly, map) {
   }
   function onUp() {
     if (!start) return;
+    dragging = false;
     map.dragging.enable();
     map.off('mousemove', onMove);
     map.off('mouseup', onUp);
     start = null;
     poly.fire('dragend');
   }
+  poly.on('mouseover', () => {
+    if (!dragging) map.dragging.disable();
+  });
+  poly.on('mouseout', () => {
+    if (!dragging) map.dragging.enable();
+  });
   poly.on('mousedown', (e) => {
     start = e.latlng;
     initial = poly.getLatLngs().map((r) => r.map((p) => ({ lat: p.lat, lng: p.lng })));
+    dragging = true;
     map.dragging.disable();
     if (e.originalEvent) {
       L.DomEvent.stopPropagation(e);
